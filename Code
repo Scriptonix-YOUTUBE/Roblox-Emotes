@@ -1,0 +1,59 @@
+--[[
+    Made by timothytheawesome (Scriptonix#6957)
+    Please give me credit if you use this in something.
+    https://discord.gg/vAdr59vcys join for more epic scripts like this.
+--]]
+
+
+local rnmu = require(5999346788)
+local httpService = game:GetService('HttpService')
+local categories = game:HttpGet('https://catalog.roblox.com/v1/categories')
+local animationCategory = httpService:JSONDecode(categories).AvatarAnimations
+local subCategory = game:HttpGet('https://catalog.roblox.com/v1/subcategories')
+local emoteCategory = httpService:JSONDecode(subCategory).EmoteAnimations
+local Market = game:GetService('MarketplaceService')
+local emotesTable = {}
+local cursor = ''
+
+local function getid(id)
+	local is = game:GetObjects('rbxassetid://'..id)[1]
+	return is.AnimationId
+end
+
+while true do
+	local requestString = ('https://catalog.roblox.com/v1/search/items/details?Category=%s&Subcategory=%s&IncludeNotForSale=true&Limit=30&Cursor=%s'):format(
+	animationCategory, emoteCategory, cursor
+	)
+	local response = httpService:JSONDecode(game:HttpGet(requestString))
+	cursor = response.nextPageCursor
+
+	for _, data in ipairs(response.data) do
+		emotesTable[rnmu.subend(string.lower(data.name),' -')] = getid(data.id)
+	end
+
+	if not cursor then
+		break
+	end
+end
+
+local function GetAnimationID(animname)
+	return emotesTable[string.lower(animname)]
+end
+
+local function PlayEmote(animname)
+	local animid = GetAnimationID(animname)
+	local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	local hum = c:WaitForChild'Humanoid'
+	local anim = Instance.new('Animation',hum)
+	anim.AnimationId = animid
+	local loa = hum:LoadAnimation(anim)
+	loa:Play()
+end
+
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+	if (string.sub(msg, 1, 3) == "/e ") then
+		PlayEmote(string.sub(msg, 4))
+	elseif (string.sub(msg, 1, 7) == "/emote ") then
+		PlayEmote(string.sub(msg, 8))
+	end
+end)
