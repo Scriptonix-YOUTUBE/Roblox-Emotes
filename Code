@@ -1,11 +1,29 @@
 --[[
     Made by timothytheawesome (Scriptonix#6957)
     Please give me credit if you use this in something.
-    https://discord.gg/vAdr59vcys join for more epic scripts like this.
 --]]
 
 
-local rnmu = require(5999346788)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 local httpService = game:GetService('HttpService')
 local categories = game:HttpGet('https://catalog.roblox.com/v1/categories')
 local animationCategory = httpService:JSONDecode(categories).AvatarAnimations
@@ -28,7 +46,8 @@ while true do
 	cursor = response.nextPageCursor
 
 	for _, data in ipairs(response.data) do
-		emotesTable[rnmu.subend(string.lower(data.name),' -')] = getid(data.id)
+	    local i = string.split(string.lower(data.name),' -')[1]
+		emotesTable[i] = getid(data.id)
 	end
 
 	if not cursor then
@@ -44,10 +63,20 @@ local function PlayEmote(animname)
 	local animid = GetAnimationID(animname)
 	local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 	local hum = c:WaitForChild'Humanoid'
+	local humr = c:WaitForChild'HumanoidRootPart'
+	local p = humr.Position
 	local anim = Instance.new('Animation',hum)
 	anim.AnimationId = animid
 	local loa = hum:LoadAnimation(anim)
 	loa:Play()
+	humr.Changed:Connect(function()
+	    if not c or (humr.Position - p) > 1 or (humr.Position - p) < -1 then
+	        if anim then
+	            loa:Stop()
+	            anim:Destroy()
+	        end
+	    end
+	end)
 end
 
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
