@@ -75,7 +75,7 @@ local function PlayEmote(animname)
 	   anim:Destroy()
 	end
 end
-
+while not game.Players.LocalPlayer do game:GetService'RunService'.RenderStepped:Wait() end
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
 	if (string.sub(msg, 1, 3) == "/e ") then
 		PlayEmote(string.sub(msg, 4))
