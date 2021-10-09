@@ -70,7 +70,7 @@ local function PlayEmote(animname)
 	local loa = hum:LoadAnimation(anim)
 	loa:Play()
 	humr.Changed:Connect(function()
-	    if not c or (humr.Position - p) > 1 or (humr.Position - p) < -1 then
+	    if not c or (humr.Position - p).Magnitude > 1 or (humr.Position - p).Magnitude < -1 then
 	        if anim then
 	            loa:Stop()
 	            anim:Destroy()
