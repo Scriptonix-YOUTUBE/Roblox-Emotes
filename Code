@@ -69,14 +69,11 @@ local function PlayEmote(animname)
 	anim.AnimationId = animid
 	local loa = hum:LoadAnimation(anim)
 	loa:Play()
-	humr.Changed:Connect(function()
-	    if not c or (humr.Position - p).Magnitude > 1 or (humr.Position - p).Magnitude < -1 then
-	        if anim then
-	            loa:Stop()
-	            anim:Destroy()
-	        end
-	    end
-	end)
+	hum.Running:Wait()
+	if anim then
+	   loa:Stop()
+	   anim:Destroy()
+	end
 end
 
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
