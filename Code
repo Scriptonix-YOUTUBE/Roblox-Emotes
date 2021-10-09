@@ -21,7 +21,7 @@
 
 
 
-if not game.Loaded then game.Loaded:Wait() wait(3) end
+if not game.Loaded then game.Loaded:Wait() wait(3) end 
 
 
 local httpService = game:GetService('HttpService')
