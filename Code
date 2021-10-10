@@ -38,7 +38,7 @@ local function getid(id)
 	return is.AnimationId
 end
 
-while true do
+while true do -- gets all existing emotes
 	local requestString = ('https://catalog.roblox.com/v1/search/items/details?Category=%s&Subcategory=%s&IncludeNotForSale=true&Limit=30&Cursor=%s'):format(
 	animationCategory, emoteCategory, cursor
 	)
@@ -46,7 +46,7 @@ while true do
 	cursor = response.nextPageCursor
 
 	for _, data in ipairs(response.data) do
-	    local i = string.split(string.lower(data.name),' -')[1]
+		local i = string.split(string.lower(data.name),' -')[1]
 		emotesTable[i] = getid(data.id)
 	end
 
@@ -55,11 +55,11 @@ while true do
 	end
 end
 
-local function GetAnimationID(animname)
+local function GetAnimationID(animname) -- turns the name of the emote into a usable ID
 	return emotesTable[string.lower(animname)]
 end
 
-local function PlayEmote(animname)
+local function PlayEmote(animname) -- plays the emote based on the emote name
 	local animid = GetAnimationID(animname)
 	local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 	local hum = c:WaitForChild'Humanoid'
@@ -69,11 +69,14 @@ local function PlayEmote(animname)
 	anim.AnimationId = animid
 	local loa = hum:LoadAnimation(anim)
 	loa:Play()
-	hum.Running:Wait()
-	if anim then
-	   loa:Stop()
-	   anim:Destroy()
-	end
+	hum.Running:Connect(function(speed)
+		if speed > 0 then -- checks if the player is actually walking
+			if anim then
+				loa:Stop()
+				anim:Destroy()
+			end
+		end
+	end)
 end
 while not game.Players.LocalPlayer do game:GetService'RunService'.RenderStepped:Wait() end
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
