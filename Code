@@ -24,6 +24,27 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local loa
+local anim
 local httpService = game:GetService('HttpService')
 local categories = game:HttpGet('https://catalog.roblox.com/v1/categories')
 local animationCategory = httpService:JSONDecode(categories).AvatarAnimations
@@ -59,22 +80,31 @@ local function GetAnimationID(animname) -- turns the name of the emote into a us
 	return emotesTable[string.lower(animname)]
 end
 
+local function StopEmote() -- stops the emote
+	anim = nil
+	loa = nil
+	if anim then
+		loa:Stop()
+		anim:Destroy()
+	end
+end
+
 local function PlayEmote(animname) -- plays the emote based on the emote name
+	if anim then
+		StopEmote()
+	end
 	local animid = GetAnimationID(animname)
 	local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 	local hum = c:WaitForChild'Humanoid'
 	local humr = c:WaitForChild'HumanoidRootPart'
 	local p = humr.Position
-	local anim = Instance.new('Animation',hum)
+	anim = Instance.new('Animation',hum)
 	anim.AnimationId = animid
-	local loa = hum:LoadAnimation(anim)
+	loa = hum:LoadAnimation(anim)
 	loa:Play()
 	hum.Running:Connect(function(speed)
 		if speed > 0 then -- checks if the player is actually walking
-			if anim then
-				loa:Stop()
-				anim:Destroy()
-			end
+			StopEmote()
 		end
 	end)
 end
