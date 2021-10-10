@@ -80,12 +80,12 @@ local function GetAnimationID(animname) -- turns the name of the emote into a us
 end
 
 local function StopEmote() -- stops the emote
-	anim = nil
-	loa = nil
 	if anim then
 		loa:Stop()
 		anim:Destroy()
 	end
+	anim = nil
+	loa = nil
 end
 
 local function PlayEmote(animname) -- plays the emote based on the emote name
@@ -101,6 +101,9 @@ local function PlayEmote(animname) -- plays the emote based on the emote name
 	anim.AnimationId = animid
 	loa = hum:LoadAnimation(anim)
 	loa:Play()
+	loa.Stopped:Connect(function()
+	    StopEmote()
+	end)
 	hum.Running:Connect(function(speed)
 		if speed > 0 then -- checks if the player is actually walking
 			StopEmote()
