@@ -90,8 +90,9 @@ end
 
 local function PlayEmote(animname) -- plays the emote based on the emote name
         local animid = GetAnimationID(animname)
-	if anim and animid then
+	if anim then
 		StopEmote()
+	if animid then
                 local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 	        local hum = c:WaitForChild'Humanoid'
 	        local humr = c:WaitForChild'HumanoidRootPart'
@@ -111,6 +112,7 @@ local function PlayEmote(animname) -- plays the emote based on the emote name
 			StopEmote()
 		end
 	end)
+	end
 	end
 end
 while not game.Players.LocalPlayer do game:GetService'RunService'.RenderStepped:Wait() end
