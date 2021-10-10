@@ -103,6 +103,7 @@ local function PlayEmote(animname) -- plays the emote based on the emote name
 	loa = hum:LoadAnimation(anim)
 	loa:Play()
 	loa.Stopped:Connect(function()
+	print('hi')
 	    StopEmote()
 	end)
 	hum.Running:Connect(function(speed)
