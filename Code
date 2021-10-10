@@ -89,29 +89,29 @@ local function StopEmote() -- stops the emote
 end
 
 local function PlayEmote(animname) -- plays the emote based on the emote name
-	if anim then
+        local animid = GetAnimationID(animname)
+	if anim and animid then
 		StopEmote()
-	end
-	local animid = GetAnimationID(animname)
-	local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-	local hum = c:WaitForChild'Humanoid'
-	local humr = c:WaitForChild'HumanoidRootPart'
-	local p = humr.Position
-	anim = Instance.new('Animation',hum)
-	anim.AnimationId = animid
-	loa = hum:LoadAnimation(anim)
-	loa:Play()
-	loa.Stopped:Connect(function()
-	    StopEmote()
-	end)
-	hum.Jumping:Connect(function()
-	    StopEmote()
-	end)
-	hum.Running:Connect(function(speed)
+                local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	        local hum = c:WaitForChild'Humanoid'
+	        local humr = c:WaitForChild'HumanoidRootPart'
+	        local p = humr.Position
+	        anim = Instance.new('Animation',hum)
+	        anim.AnimationId = animid
+	        loa = hum:LoadAnimation(anim)
+	        loa:Play()
+	        loa.Stopped:Connect(function()
+	            StopEmote()
+	        end)
+	        hum.Jumping:Connect(function()
+	            StopEmote()
+	        end)
+	        hum.Running:Connect(function(speed)
 		if speed > 0 then -- checks if the player is actually walking
 			StopEmote()
 		end
 	end)
+	end
 end
 while not game.Players.LocalPlayer do game:GetService'RunService'.RenderStepped:Wait() end
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
