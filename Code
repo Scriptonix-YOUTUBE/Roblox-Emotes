@@ -80,7 +80,7 @@ local function GetAnimationID(animname) -- turns the name of the emote into a us
 end
 
 local function StopEmote() -- stops the emote
-	if anim ~= nil then
+	if anim then
 		loa:Stop()
 		anim:Destroy()
 	end
