@@ -11,7 +11,7 @@
 
 
 
- print('new')
+ print('newish')
 
 
 
@@ -103,6 +103,9 @@ local function PlayEmote(animname) -- plays the emote based on the emote name
 	        loa = hum:LoadAnimation(anim)
 	        loa:Play()
 	        loa.Stopped:Connect(function()
+	            if anim then
+		        anim:Destroy()
+	            end
 	            anim = nil
 	            loa = nil
 	        end)
