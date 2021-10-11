@@ -107,7 +107,6 @@ local function PlayEmote(animname) -- plays the emote based on the emote name
 	            StopEmote()
 	        end)
 	        hum.Jumping:Connect(function()
-		print('jump')
 	            StopEmote()
 	        end)
 	        hum.Running:Connect(function(speed)
