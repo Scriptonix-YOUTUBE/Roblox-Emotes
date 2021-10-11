@@ -4,10 +4,10 @@
 --]]
 
 
- 
- 
 
- 
+
+
+
 
 
 
@@ -80,46 +80,55 @@ local function GetAnimationID(animname) -- turns the name of the emote into a us
 end
 
 local function StopEmote() -- stops the emote
-        if loa then
-	   loa:Stop()
+	if loa then
+		loa:Stop()
 	end
 	if anim then
-	        print(anim)
+		print(anim)
 		anim:Destroy()
 	end
+	
+	local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	local anime = c:WaitForChild'Animate'
+	
+	anime.Disabled = false
 	anim = nil
 	loa = nil
 end
 
 local function PlayEmote(animname) -- plays the emote based on the emote name
-        local animid = GetAnimationID(animname)
+	local animid = GetAnimationID(animname)
 	if anim then
 		StopEmote()
 	end
 	if animid then
-                local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-	        local hum = c:WaitForChild'Humanoid'
-	        local humr = c:WaitForChild'HumanoidRootPart'
-	        local p = humr.Position
-	        anim = Instance.new('Animation',hum)
-	        anim.AnimationId = animid
-	        loa = hum:LoadAnimation(anim)
-	        loa:Play(.1,1,1)
-	        loa.Stopped:Connect(function()
-		print('loa')
-	            if anim then
-		        anim:Destroy()
-	            end
-	            anim = nil
-	            loa = nil
-	        end)
-	        hum.Jumping:Connect(function()
-		print('jump')
-	            StopEmote()
-	        end)
-	        hum.Running:Connect(function(speed)
+		local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+		local anime = c:WaitForChild'Animate'
+		local hum = c:WaitForChild'Humanoid'
+		local humr = c:WaitForChild'HumanoidRootPart'
+		local p = humr.Position
+		anim = Instance.new('Animation',hum)
+		anim.AnimationId = animid
+		loa = hum:LoadAnimation(anim)
+		anime.Disabled = true
+		loa:Play(.1,1,1)
+		loa.Stopped:Connect(function()
+			if anim then
+				anim:Destroy()
+			end
+			
+			local c = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+			local anime = c:WaitForChild'Animate'
+
+			anime.Disabled = false
+			anim = nil
+			loa = nil
+		end)
+		hum.Jumping:Connect(function()
+			StopEmote()
+		end)
+		hum.Running:Connect(function(speed)
 			if speed > 0 then -- checks if the player is actually walking
-			print('speed')
 				StopEmote()
 			end
 		end)
