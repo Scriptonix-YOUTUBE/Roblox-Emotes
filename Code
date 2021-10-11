@@ -80,7 +80,7 @@ local function GetAnimationID(animname) -- turns the name of the emote into a us
 end
 
 local function StopEmote() -- stops the emote
-        if loa.IsPlaying then
+        if loa then
 	   loa:Stop()
 	end
 	if anim then
