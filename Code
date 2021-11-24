@@ -137,7 +137,7 @@ end
 while not game.Players.LocalPlayer do game:GetService'RunService'.RenderStepped:Wait() end
 game.Players.LocalPlayer.DescendantAdded:Connect(function(v)
 	if v:IsA('TextLabel') and v.Text == "You can't use that Emote." then
-		v:Destroy()
+		v.Parent:Destroy()
 	end
 end)
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
